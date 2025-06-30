@@ -49,7 +49,6 @@ Resources:
                   - Name: prefix
                     Value: advance/
 
-
   AMTTextractProcessorFunctionBasic:
     Type: AWS::Serverless::Function
     Properties:
@@ -79,7 +78,7 @@ Resources:
                   - Name: prefix
                     Value: basic/
 
-  # DynamoDB Tables
+  # DynamoDB Table
   AMTCompanyFieldsTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -92,10 +91,9 @@ Resources:
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
 
-  # S3 Bucket Policy
+  # S3 Bucket Policy (Textract access only)
   AMTDocumentBucketPolicy:
     Type: AWS::S3::BucketPolicy
-    DependsOn: AMTDocumentBucket
     Properties:
       Bucket: !Ref AMTDocumentBucket
       PolicyDocument:
@@ -108,35 +106,6 @@ Resources:
               - s3:GetObject
               - s3:PutObject
             Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
-          # - Effect: Allow
-          #   Principal:
-          #     Service: lambda.amazonaws.com
-          #   Action: 
-          #     - s3:*
-          #   Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
-
-  # Lambda Permission for S3
-  # S3InvokePermission:
-  #   Type: AWS::Lambda::Permission
-  #   DependsOn: 
-  #     - AMTTextractProcessorFunctionAdvanced
-  #     - AMTDocumentBucket
-  #   Properties:
-  #     Action: lambda:InvokeFunction
-  #     FunctionName: !Ref AMTTextractProcessorFunctionAdvanced
-  #     Principal: s3.amazonaws.com
-  #     SourceArn: !Sub 'arn:aws:s3:::${AMTDocumentBucket}'
-
-  # S3InvokePermissionBasic:
-  #   Type: AWS::Lambda::Permission
-  #   DependsOn:
-  #     - AMTTextractProcessorFunctionBasic
-  #     - AMTDocumentBucket
-  #   Properties:
-  #     Action: lambda:InvokeFunction
-  #     FunctionName: !Ref AMTTextractProcessorFunctionBasic
-  #     Principal: s3.amazonaws.com
-  #     SourceArn: !Sub 'arn:aws:s3:::${AMTDocumentBucket}'
 
 Outputs:
   AMTDocumentBucketName:
