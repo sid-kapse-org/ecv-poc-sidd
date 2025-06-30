@@ -146,7 +146,3 @@ Outputs:
   AMTTextractProcessorFunctionRoleName:
     Description: IAM role name for Textract processor functions
     Value: !Ref AMTTextractProcessorFunctionRole
-
-  AMTTextractProcessorFunctionRolePolicy:
-    Description: IAM role policy for Textract processor functions
-    Value: !GetAtt AMTTextractProcessorFunctionRole.Policy.Arn
