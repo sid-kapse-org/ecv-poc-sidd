@@ -30,17 +30,7 @@ Resources:
                 - textract:StartDocumentAnalysis
                 - textract:GetDocumentAnalysis
               Resource: '*'
-      Events:
-        S3Upload:
-          Type: S3
-          Properties:
-            Bucket: !Ref AMTDocumentBucket
-            Events: s3:ObjectCreated:*
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: prefix
-                    Value: advance/  # Process files in the 'documents/' folder
+
 
   AMTTextractProcessorFunctionBasic:
     Type: AWS::Serverless::Function
@@ -59,29 +49,13 @@ Resources:
                 - textract:StartDocumentAnalysis
                 - textract:GetDocumentAnalysis
               Resource: '*'
-      Events:
-        S3Upload:
-          Type: S3
-          Properties:
-            Bucket: !Ref AMTDocumentBucket
-            Events: s3:ObjectCreated:*
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: prefix
-                    Value: basic/  # Process files in the 'documents/' folder
+
 
   # S3 Bucket for document uploads
   AMTDocumentBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub 'amt-poc-documents'
-      NotificationConfiguration:
-        LambdaConfigurations:
-          - Event: s3:ObjectCreated:*
-            Function: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
-          - Event: s3:ObjectCreated:*
-            Function: !GetAtt AMTTextractProcessorFunctionBasic.Arn
 
   # DynamoDB Tables
   AMTCompanyFieldsTable:
@@ -126,6 +100,31 @@ Resources:
       FunctionName: !Ref AMTTextractProcessorFunctionBasic
       Principal: s3.amazonaws.com
       SourceArn: !Sub 'arn:aws:s3:::${AMTDocumentBucket}'
+
+  # S3 Bucket Notifications
+  AMTDocumentBucketNotifications:
+    Type: AWS::S3::BucketNotification
+    DependsOn: 
+      - S3InvokePermission
+      - S3InvokePermissionBasic
+      - AMTDocumentBucketPolicy
+    Properties:
+      Bucket: !Ref AMTDocumentBucket
+      LambdaFunctionConfigurations:
+        - Event: s3:ObjectCreated:*
+          Function: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
+          Filter:
+            S3Key:
+              Rules:
+                - Name: prefix
+                  Value: advance/
+        - Event: s3:ObjectCreated:*
+          Function: !GetAtt AMTTextractProcessorFunctionBasic.Arn
+          Filter:
+            S3Key:
+              Rules:
+                - Name: prefix
+                  Value: basic/
 
 Outputs:
   AMTDocumentBucketName:
