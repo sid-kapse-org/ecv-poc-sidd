@@ -118,35 +118,35 @@ Resources:
                 Resource:
                   - '*'
 
-# Outputs:
-  # AMTDocumentBucketName:
-  #   Description: Name of the S3 bucket for document uploads
-  #   Value: !Ref AMTDocumentBucket
+Outputs:
+  AMTDocumentBucketName:
+    Description: Name of the S3 bucket for document uploads
+    Value: !Ref AMTDocumentBucket
 
-  # AMTCompanyFieldsTableName:
-  #   Description: Name of the DynamoDB table for company configurations
-  #   Value: !Ref AMTCompanyFieldsTable
+  AMTCompanyFieldsTableName:
+    Description: Name of the DynamoDB table for company configurations
+    Value: !Ref AMTCompanyFieldsTable
 
-  # AMTTextractProcessorFunctionAdvanced:
-  #   Description: Lambda function ARN
-  #   Value: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
+  AMTTextractProcessorFunctionAdvanced:
+    Description: Lambda function ARN
+    Value: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
 
-  # AMTTextractProcessorFunctionBasic:
-  #   Description: Lambda function ARN
-  #   Value: !GetAtt AMTTextractProcessorFunctionBasic.Arn
+  AMTTextractProcessorFunctionBasic:
+    Description: Lambda function ARN
+    Value: !GetAtt AMTTextractProcessorFunctionBasic.Arn
 
-  # AMTDocumentBucketPolicy:
-  #   Description: S3 bucket policy for Textract access
-  #   Value: !Ref AMTDocumentBucketPolicy
+  AMTDocumentBucketPolicy:
+    Description: S3 bucket policy for Textract access
+    Value: !Ref AMTDocumentBucketPolicy
 
-  # AMTTextractProcessorFunctionRole:
-  #   Description: IAM role for Textract processor functions
-  #   Value: !GetAtt AMTTextractProcessorFunctionRole.Arn
+  AMTTextractProcessorFunctionRole:
+    Description: IAM role for Textract processor functions
+    Value: !GetAtt AMTTextractProcessorFunctionRole.Arn
 
-  # AMTTextractProcessorFunctionRoleName:
-  #   Description: IAM role name for Textract processor functions
-  #   Value: !Ref AMTTextractProcessorFunctionRole
+  AMTTextractProcessorFunctionRoleName:
+    Description: IAM role name for Textract processor functions
+    Value: !Ref AMTTextractProcessorFunctionRole
 
-  # AMTTextractProcessorFunctionRolePolicy:
-  #   Description: IAM role policy for Textract processor functions
-  #   Value: !GetAtt AMTTextractProcessorFunctionRole.Policy.Arn
+  AMTTextractProcessorFunctionRolePolicy:
+    Description: IAM role policy for Textract processor functions
+    Value: !GetAtt AMTTextractProcessorFunctionRole.Policy.Arn
