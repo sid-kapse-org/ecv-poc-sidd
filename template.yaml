@@ -92,34 +92,34 @@ Resources:
       BillingMode: PAY_PER_REQUEST
 
   # S3 Bucket Policy (Textract access only)
-  AMTDocumentBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref AMTDocumentBucket
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: textract.amazonaws.com
-            Action:
-              - s3:GetObject
-              - s3:PutObject
-            Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
+  # AMTDocumentBucketPolicy:
+  #   Type: AWS::S3::BucketPolicy
+  #   Properties:
+  #     Bucket: !Ref AMTDocumentBucket
+  #     PolicyDocument:
+  #       Version: '2012-10-17'
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service: textract.amazonaws.com
+  #           Action:
+  #             - s3:GetObject
+  #             - s3:PutObject
+  #           Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
 
-Outputs:
-  AMTDocumentBucketName:
-    Description: Name of the S3 bucket for document uploads
-    Value: !Ref AMTDocumentBucket
+# Outputs:
+#   AMTDocumentBucketName:
+#     Description: Name of the S3 bucket for document uploads
+#     Value: !Ref AMTDocumentBucket
 
-  AMTCompanyFieldsTableName:
-    Description: Name of the DynamoDB table for company configurations
-    Value: !Ref AMTCompanyFieldsTable
+#   AMTCompanyFieldsTableName:
+#     Description: Name of the DynamoDB table for company configurations
+#     Value: !Ref AMTCompanyFieldsTable
 
-  AMTTextractProcessorFunctionAdvanced:
-    Description: Lambda function ARN
-    Value: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
+#   AMTTextractProcessorFunctionAdvanced:
+#     Description: Lambda function ARN
+#     Value: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
 
-  AMTTextractProcessorFunctionBasic:
-    Description: Lambda function ARN
-    Value: !GetAtt AMTTextractProcessorFunctionBasic.Arn
+#   AMTTextractProcessorFunctionBasic:
+#     Description: Lambda function ARN
+#     Value: !GetAtt AMTTextractProcessorFunctionBasic.Arn
