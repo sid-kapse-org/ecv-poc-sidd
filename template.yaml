@@ -54,28 +54,32 @@ Resources:
   # S3 Bucket for document uploads
   AMTDocumentBucket:
     Type: AWS::S3::Bucket
-    DependsOn: 
-      - S3InvokePermission
-      - S3InvokePermissionBasic
-      - AMTDocumentBucketPolicy
     Properties:
       BucketName: !Sub 'amt-poc-documents'
-      NotificationConfiguration:
-        LambdaConfigurations:
-          - Event: s3:ObjectCreated:*
-            Function: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: prefix
-                    Value: advance/
-          - Event: s3:ObjectCreated:*
-            Function: !GetAtt AMTTextractProcessorFunctionBasic.Arn
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: prefix
-                    Value: basic/
+
+  # S3 Bucket Notifications Configuration
+  AMTDocumentBucketNotifications:
+    Type: AWS::S3::BucketNotification
+    DependsOn:
+      - S3InvokePermission
+      - S3InvokePermissionBasic
+    Properties:
+      Bucket: !Ref AMTDocumentBucket
+      LambdaConfigurations:
+        - Event: s3:ObjectCreated:*
+          Function: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
+          Filter:
+            S3Key:
+              Rules:
+                - Name: prefix
+                  Value: advance/
+        - Event: s3:ObjectCreated:*
+          Function: !GetAtt AMTTextractProcessorFunctionBasic.Arn
+          Filter:
+            S3Key:
+              Rules:
+                - Name: prefix
+                  Value: basic/
 
   # DynamoDB Tables
   AMTCompanyFieldsTable:
@@ -93,6 +97,7 @@ Resources:
   # S3 Bucket Policy
   AMTDocumentBucketPolicy:
     Type: AWS::S3::BucketPolicy
+    DependsOn: AMTDocumentBucket
     Properties:
       Bucket: !Ref AMTDocumentBucket
       PolicyDocument:
@@ -103,18 +108,30 @@ Resources:
               Service: textract.amazonaws.com
             Action: s3:GetObject
             Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 
+              - s3:GetObject
+            Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
 
   # Lambda Permission for S3
   S3InvokePermission:
     Type: AWS::Lambda::Permission
+    DependsOn: 
+      - AMTTextractProcessorFunctionAdvanced
+      - AMTDocumentBucket
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !Ref AMTTextractProcessorFunctionAdvanced
       Principal: s3.amazonaws.com
       SourceArn: !Sub 'arn:aws:s3:::${AMTDocumentBucket}'
-      #add for basic function
+
   S3InvokePermissionBasic:
     Type: AWS::Lambda::Permission
+    DependsOn:
+      - AMTTextractProcessorFunctionBasic
+      - AMTDocumentBucket
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !Ref AMTTextractProcessorFunctionBasic
