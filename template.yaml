@@ -58,28 +58,28 @@ Resources:
       BucketName: !Sub 'amt-poc-documents'
 
   # S3 Bucket Notifications Configuration
-  AMTDocumentBucketNotifications:
-    Type: AWS::S3::BucketNotification
-    DependsOn:
-      - S3InvokePermission
-      - S3InvokePermissionBasic
-    Properties:
-      Bucket: !Ref AMTDocumentBucket
-      LambdaConfigurations:
-        - Event: s3:ObjectCreated:*
-          Function: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
-          Filter:
-            S3Key:
-              Rules:
-                - Name: prefix
-                  Value: advance/
-        - Event: s3:ObjectCreated:*
-          Function: !GetAtt AMTTextractProcessorFunctionBasic.Arn
-          Filter:
-            S3Key:
-              Rules:
-                - Name: prefix
-                  Value: basic/
+  # AMTDocumentBucketNotifications:
+  #   Type: AWS::S3::BucketNotification
+  #   DependsOn:
+  #     - S3InvokePermission
+  #     - S3InvokePermissionBasic
+  #   Properties:
+  #     Bucket: !Ref AMTDocumentBucket
+  #     LambdaConfigurations:
+  #       - Event: s3:ObjectCreated:*
+  #         Function: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
+  #         Filter:
+  #           S3Key:
+  #             Rules:
+  #               - Name: prefix
+  #                 Value: advance/
+  #       - Event: s3:ObjectCreated:*
+  #         Function: !GetAtt AMTTextractProcessorFunctionBasic.Arn
+  #         Filter:
+  #           S3Key:
+  #             Rules:
+  #               - Name: prefix
+  #                 Value: basic/
 
   # DynamoDB Tables
   AMTCompanyFieldsTable:
