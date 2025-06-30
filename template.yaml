@@ -30,6 +30,17 @@ Resources:
                 - textract:StartDocumentAnalysis
                 - textract:GetDocumentAnalysis
               Resource: '*'
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket: !Ref AMTDocumentBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: advance/
 
 
   AMTTextractProcessorFunctionBasic:
@@ -49,37 +60,23 @@ Resources:
                 - textract:StartDocumentAnalysis
                 - textract:GetDocumentAnalysis
               Resource: '*'
-
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket: !Ref AMTDocumentBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: basic/
 
   # S3 Bucket for document uploads
   AMTDocumentBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub 'amt-poc-documents'
-
-  # S3 Bucket Notifications Configuration
-  # AMTDocumentBucketNotifications:
-  #   Type: AWS::S3::BucketNotification
-  #   DependsOn:
-  #     - S3InvokePermission
-  #     - S3InvokePermissionBasic
-  #   Properties:
-  #     Bucket: !Ref AMTDocumentBucket
-  #     LambdaConfigurations:
-  #       - Event: s3:ObjectCreated:*
-  #         Function: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
-  #         Filter:
-  #           S3Key:
-  #             Rules:
-  #               - Name: prefix
-  #                 Value: advance/
-  #       - Event: s3:ObjectCreated:*
-  #         Function: !GetAtt AMTTextractProcessorFunctionBasic.Arn
-  #         Filter:
-  #           S3Key:
-  #             Rules:
-  #               - Name: prefix
-  #                 Value: basic/
 
   # DynamoDB Tables
   AMTCompanyFieldsTable:
@@ -106,13 +103,20 @@ Resources:
           - Effect: Allow
             Principal:
               Service: textract.amazonaws.com
-            Action: s3:GetObject
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+              - s3:DeleteObject
+              - s3:ListBucket
             Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
           - Effect: Allow
             Principal:
               Service: lambda.amazonaws.com
             Action: 
               - s3:GetObject
+              - s3:PutObject
+              - s3:DeleteObject
+              - s3:ListBucket
             Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
 
   # Lambda Permission for S3
@@ -137,8 +141,6 @@ Resources:
       FunctionName: !Ref AMTTextractProcessorFunctionBasic
       Principal: s3.amazonaws.com
       SourceArn: !Sub 'arn:aws:s3:::${AMTDocumentBucket}'
-
-
 
 Outputs:
   AMTDocumentBucketName:
