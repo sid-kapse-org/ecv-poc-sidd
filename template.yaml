@@ -67,7 +67,7 @@ Resources:
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
 
-  S3 Bucket Policy (Textract access only)
+  #S3 Bucket Policy (Textract access only)
   AMTDocumentBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
