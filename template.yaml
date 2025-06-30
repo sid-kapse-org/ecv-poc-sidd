@@ -119,17 +119,17 @@ Resources:
                   - '*'
 
 # Outputs:
-  AMTDocumentBucketName:
-    Description: Name of the S3 bucket for document uploads
-    Value: !Ref AMTDocumentBucket
+  # AMTDocumentBucketName:
+  #   Description: Name of the S3 bucket for document uploads
+  #   Value: !Ref AMTDocumentBucket
 
-  AMTCompanyFieldsTableName:
-    Description: Name of the DynamoDB table for company configurations
-    Value: !Ref AMTCompanyFieldsTable
+  # AMTCompanyFieldsTableName:
+  #   Description: Name of the DynamoDB table for company configurations
+  #   Value: !Ref AMTCompanyFieldsTable
 
-  AMTTextractProcessorFunctionAdvanced:
-    Description: Lambda function ARN
-    Value: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
+  # AMTTextractProcessorFunctionAdvanced:
+  #   Description: Lambda function ARN
+  #   Value: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
 
   # AMTTextractProcessorFunctionBasic:
   #   Description: Lambda function ARN
