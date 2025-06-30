@@ -131,17 +131,17 @@ Resources:
     Description: Lambda function ARN
     Value: !GetAtt AMTTextractProcessorFunctionAdvanced.Arn
 
-  AMTTextractProcessorFunctionBasic:
-    Description: Lambda function ARN
-    Value: !GetAtt AMTTextractProcessorFunctionBasic.Arn
+  # AMTTextractProcessorFunctionBasic:
+  #   Description: Lambda function ARN
+  #   Value: !GetAtt AMTTextractProcessorFunctionBasic.Arn
 
-  AMTDocumentBucketPolicy:
-    Description: S3 bucket policy for Textract access
-    Value: !Ref AMTDocumentBucketPolicy
+  # AMTDocumentBucketPolicy:
+  #   Description: S3 bucket policy for Textract access
+  #   Value: !Ref AMTDocumentBucketPolicy
 
-  AMTTextractProcessorFunctionRole:
-    Description: IAM role for Textract processor functions
-    Value: !GetAtt AMTTextractProcessorFunctionRole.Arn
+  # AMTTextractProcessorFunctionRole:
+  #   Description: IAM role for Textract processor functions
+  #   Value: !GetAtt AMTTextractProcessorFunctionRole.Arn
 
   # AMTTextractProcessorFunctionRoleName:
   #   Description: IAM role name for Textract processor functions
