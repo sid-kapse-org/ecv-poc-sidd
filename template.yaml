@@ -25,18 +25,6 @@ Resources:
     Properties:
       Handler: AMTTextractProcessorFunctionAdvanced.handler
       CodeUri: ./
-      # Policies:
-      #   - S3ReadPolicy:
-      #       BucketName: !Ref AMTDocumentBucket
-      #   - DynamoDBCrudPolicy:
-      #       TableName: !Ref AMTCompanyFieldsTable
-      #   - Statement:
-      #       - Effect: Allow
-      #         Action:
-      #           - textract:AnalyzeDocument
-      #           - textract:StartDocumentAnalysis
-      #           - textract:GetDocumentAnalysis
-      #         Resource: '*'
       Events:
         S3Event:
           Type: S3
@@ -54,18 +42,6 @@ Resources:
     Properties:
       Handler: AMTTextractProcessorFunctionBasic.handler
       CodeUri: ./
-      # Policies:
-      #   - S3ReadPolicy:
-      #       BucketName: !Ref AMTDocumentBucket
-      #   - DynamoDBCrudPolicy:
-      #       TableName: !Ref AMTCompanyFieldsTable
-      #   - Statement:
-      #       - Effect: Allow
-      #         Action:
-      #           - textract:AnalyzeDocument
-      #           - textract:StartDocumentAnalysis
-      #           - textract:GetDocumentAnalysis
-      #         Resource: '*'
       Events:
         S3Event:
           Type: S3
@@ -91,21 +67,56 @@ Resources:
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
 
-  # S3 Bucket Policy (Textract access only)
-  # AMTDocumentBucketPolicy:
-  #   Type: AWS::S3::BucketPolicy
-  #   Properties:
-  #     Bucket: !Ref AMTDocumentBucket
-  #     PolicyDocument:
-  #       Version: '2012-10-17'
-  #       Statement:
-  #         - Effect: Allow
-  #           Principal:
-  #             Service: textract.amazonaws.com
-  #           Action:
-  #             - s3:GetObject
-  #             - s3:PutObject
-  #           Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
+  S3 Bucket Policy (Textract access only)
+  AMTDocumentBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref AMTDocumentBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: textract.amazonaws.com
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+            Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
+  
+  #roles for lambda functions to access S3 and DynamoDB and Textract
+  AMTTextractProcessorFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: AMTTextractProcessorFunctionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                Resource: !GetAtt AMTCompanyFieldsTable.Arn
+              - Effect: Allow
+                Action:
+                  - textract:AnalyzeDocument
+                  - textract:StartDocumentAnalysis
+                  - textract:GetDocumentAnalysis
+                Resource:
+                  - '*'
 
 # Outputs:
 #   AMTDocumentBucketName:
