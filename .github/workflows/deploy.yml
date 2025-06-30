@@ -18,6 +18,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    environment: ECV-POC-ACCOUNT
 
     # Steps represent a sequence of tasks that will be executed as part of the jobb
     steps:
@@ -26,13 +27,6 @@ jobs:
           echo "AWS_ROLE_ARN: ${{secrets.AWS_ROLE_ARN}}"
           echo "ARTIFACT_BUCKET: ${{ secrets.ARTIFACT_BUCKET }}"
           echo "AWS_REGION: ${{ secrets.AWS_REGION }}"
-
-      - name: Debug AWS Credentials
-        run: |
-          echo "AWS_ROLE_ARN: ${{secrets.AWS_ROLE_ARN}}"
-          echo "ARTIFACT_BUCKET: ${{ secrets.ARTIFACT_BUCKET }}"
-          echo "AWS_REGION: ${{ secrets.AWS_REGION }}"
-
 
       # - uses: actions/checkout@v4
 
