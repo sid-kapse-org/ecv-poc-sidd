@@ -12,6 +12,13 @@ Globals:
         COMPANY_FIELDS_TABLE: !Ref AMTCompanyFieldsTable
 
 Resources:
+
+  # S3 Bucket for document uploads
+  AMTDocumentBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'amt-poc-documents'
+      
   # Lambda Functions
   AMTTextractProcessorFunctionAdvanced:
     Type: AWS::Serverless::Function
@@ -71,12 +78,6 @@ Resources:
       #           Rules:
       #             - Name: prefix
       #               Value: basic/
-
-  # S3 Bucket for document uploads
-  AMTDocumentBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub 'amt-poc-documents'
 
   # DynamoDB Tables
   AMTCompanyFieldsTable:
