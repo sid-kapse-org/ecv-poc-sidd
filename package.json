@@ -22,8 +22,6 @@
     "@aws-sdk/client-textract": "^3.x",
     "@aws-sdk/lib-dynamodb": "^3.x",
     "uuid": "^11.1.0"
-  },
-  "devDependencies": {
-    "aws-sam-cli": "^1.x"
   }
+
 }
