@@ -25,18 +25,18 @@ Resources:
     Properties:
       Handler: AMTTextractProcessorFunctionAdvanced.handler
       CodeUri: ./
-      Policies:
-        - S3ReadPolicy:
-            BucketName: !Ref AMTDocumentBucket
-        - DynamoDBCrudPolicy:
-            TableName: !Ref AMTCompanyFieldsTable
-        - Statement:
-            - Effect: Allow
-              Action:
-                - textract:AnalyzeDocument
-                - textract:StartDocumentAnalysis
-                - textract:GetDocumentAnalysis
-              Resource: '*'
+      # Policies:
+      #   - S3ReadPolicy:
+      #       BucketName: !Ref AMTDocumentBucket
+      #   - DynamoDBCrudPolicy:
+      #       TableName: !Ref AMTCompanyFieldsTable
+      #   - Statement:
+      #       - Effect: Allow
+      #         Action:
+      #           - textract:AnalyzeDocument
+      #           - textract:StartDocumentAnalysis
+      #           - textract:GetDocumentAnalysis
+      #         Resource: '*'
       Events:
         S3Event:
           Type: S3
@@ -54,18 +54,18 @@ Resources:
     Properties:
       Handler: AMTTextractProcessorFunctionBasic.handler
       CodeUri: ./
-      Policies:
-        - S3ReadPolicy:
-            BucketName: !Ref AMTDocumentBucket
-        - DynamoDBCrudPolicy:
-            TableName: !Ref AMTCompanyFieldsTable
-        - Statement:
-            - Effect: Allow
-              Action:
-                - textract:AnalyzeDocument
-                - textract:StartDocumentAnalysis
-                - textract:GetDocumentAnalysis
-              Resource: '*'
+      # Policies:
+      #   - S3ReadPolicy:
+      #       BucketName: !Ref AMTDocumentBucket
+      #   - DynamoDBCrudPolicy:
+      #       TableName: !Ref AMTCompanyFieldsTable
+      #   - Statement:
+      #       - Effect: Allow
+      #         Action:
+      #           - textract:AnalyzeDocument
+      #           - textract:StartDocumentAnalysis
+      #           - textract:GetDocumentAnalysis
+      #         Resource: '*'
       Events:
         S3Event:
           Type: S3
