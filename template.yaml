@@ -25,6 +25,7 @@ Resources:
     Properties:
       Handler: AMTTextractProcessorFunctionAdvanced.handler
       CodeUri: ./
+      Role: !GetAtt AMTTextractProcessorFunctionRole.Arn
       Events:
         S3Event:
           Type: S3
@@ -42,6 +43,7 @@ Resources:
     Properties:
       Handler: AMTTextractProcessorFunctionBasic.handler
       CodeUri: ./
+      Role: !GetAtt AMTTextractProcessorFunctionRole.Arn
       Events:
         S3Event:
           Type: S3
