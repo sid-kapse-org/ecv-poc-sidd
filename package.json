@@ -1,0 +1,29 @@
+{
+  "name": "test-amt-textract",
+  "version": "1.0.0",
+  "exports": "./index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "sam build",
+    "deploy": "sam deploy --guided",
+    "start-local": "sam local start-api",
+    "invoke-local": "sam local invoke TextractProcessorFunction"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "AWS SAM application for Textract document processing",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.x",
+    "@aws-sdk/client-s3": "^3.x",
+    "@aws-sdk/client-textract": "^3.x",
+    "@aws-sdk/lib-dynamodb": "^3.x",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "aws-sam-cli": "^1.x"
+  }
+}
