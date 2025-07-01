@@ -73,6 +73,27 @@ Resources:
                 Rules:
                   - Name: prefix
                     Value: basic/
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - textract:AnalyzeDocument
+                - textract:StartDocumentAnalysis
+                - textract:GetDocumentAnalysis
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - s3:*
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - dynamodb:*
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - cloudwatch:*
+                - logs:*
+              Resource: "*"
 
   # DynamoDB Table
   AMTCompanyFieldsTable:
