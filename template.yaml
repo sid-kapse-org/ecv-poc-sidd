@@ -1,10 +1,10 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: SAM template for Textract document processing application
 
 Globals:
   Function:
-    Timeout: 900  # Maximum timeout for Lambda (15 minutes)
+    Timeout: 900 # Maximum timeout for Lambda (15 minutes)
     MemorySize: 1024
     Runtime: nodejs22.x
     Environment:
@@ -12,12 +12,11 @@ Globals:
         COMPANY_FIELDS_TABLE: !Ref AMTCompanyFieldsTable
 
 Resources:
-
   # S3 Bucket for document uploads
   AMTDocumentBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub 'amt-poc-documents'
+      BucketName: !Sub "amt-poc-documents"
 
   # Lambda Functions
   AMTTextractProcessorFunctionAdvanced:
@@ -36,6 +35,21 @@ Resources:
                 Rules:
                   - Name: prefix
                     Value: advance/
+      Policies:
+        - PolicyName: AMTTextractProcessorFunctionAdvancedPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - textract:AnalyzeDocument
+                  - textract:StartDocumentAnalysis
+                  - textract:GetDocumentAnalysis
+                  - s3: "*"
+                  - dynamodb: "*"
+                  - cloudwatch: "*"
+                  - logs: "*"
+                Resource: "*"
 
   AMTTextractProcessorFunctionBasic:
     Type: AWS::Serverless::Function
@@ -58,7 +72,7 @@ Resources:
   AMTCompanyFieldsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub 'amt-poc-company-fields'
+      TableName: !Sub "amt-poc-company-fields"
       AttributeDefinitions:
         - AttributeName: company
           AttributeType: S
@@ -73,7 +87,7 @@ Resources:
     Properties:
       Bucket: !Ref AMTDocumentBucket
       PolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
@@ -81,14 +95,14 @@ Resources:
             Action:
               - s3:GetObject
               - s3:PutObject
-            Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
-  
+            Resource: !Sub "arn:aws:s3:::${AMTDocumentBucket}/*"
+
   #roles for lambda functions to access S3 and DynamoDB and Textract
   AMTTextractProcessorFunctionRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
@@ -97,13 +111,13 @@ Resources:
       Policies:
         - PolicyName: AMTTextractProcessorFunctionPolicy
           PolicyDocument:
-            Version: '2012-10-17'
+            Version: "2012-10-17"
             Statement:
               - Effect: Allow
                 Action:
                   - s3:GetObject
                   - s3:PutObject
-                Resource: !Sub 'arn:aws:s3:::${AMTDocumentBucket}/*'
+                Resource: !Sub "arn:aws:s3:::${AMTDocumentBucket}/*"
               - Effect: Allow
                 Action:
                   - dynamodb:PutItem
@@ -116,7 +130,7 @@ Resources:
                   - textract:StartDocumentAnalysis
                   - textract:GetDocumentAnalysis
                 Resource:
-                  - '*'
+                  - "*"
 
 Outputs:
   AMTDocumentBucketName:
