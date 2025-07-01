@@ -106,6 +106,8 @@ The deployment process will:
 
 ## Usage
 
+### Cloud Processing (via S3)
+
 1. Upload a document to the created S3 bucket:
 ```bash
 aws s3 cp <your-document.pdf> s3://<stack-name>-documents/
@@ -117,6 +119,29 @@ aws s3 cp <your-document.pdf> s3://<stack-name>-documents/
 - Store results in DynamoDB tables
 
 3. Monitor the process through CloudWatch logs
+
+### Local File Processing
+
+To process files directly from your local machine:
+
+1. Place your document in the project's root folder
+
+2. Import and use the LocalFileProcessing module:
+```javascript
+import { handler } from './LocalFileProcessing.js';
+
+// Process a file from the root folder
+const result = await handler('document.pdf');
+console.log(result.body); // Contains extracted information
+```
+
+The local processing will:
+- Read the file from the project's root folder
+- Analyze it using Amazon Textract
+- Extract order number, delivery information, and date
+- Return the results directly without storing in DynamoDB
+
+Note: Make sure you have valid AWS credentials configured for Textract access when using local processing.
 
 ## Configuration
 
