@@ -21,13 +21,14 @@ export const handler = async (event) => {
                     Name: key
                 }
             },
-            FeatureTypes: ['FORMS']
+            FeatureTypes: ['TABLES', 'FORMS'] // Specify the features we want to analyze
         };
 
         // Analyze the document with Textract
         const command = new AnalyzeDocumentCommand(params);
         const data = await textractClient.send(command);
-        
+        console.log('Textract Response:', JSON.stringify(data, null, 2));
+
         // Process the blocks to find our target fields
         const result = {
             orderNumber: '',
