@@ -36,20 +36,26 @@ Resources:
                   - Name: prefix
                     Value: advance/
       Policies:
-        - PolicyName: AMTTextractProcessorFunctionAdvancedPolicy
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - textract:AnalyzeDocument
-                  - textract:StartDocumentAnalysis
-                  - textract:GetDocumentAnalysis
-                  - s3: "*"
-                  - dynamodb: "*"
-                  - cloudwatch: "*"
-                  - logs: "*"
-                Resource: "*"
+        - Statement:
+            - Effect: Allow
+              Action:
+                - textract:AnalyzeDocument
+                - textract:StartDocumentAnalysis
+                - textract:GetDocumentAnalysis
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - s3:*
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - dynamodb:*
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - cloudwatch:*
+                - logs:*
+              Resource: "*"
 
   AMTTextractProcessorFunctionBasic:
     Type: AWS::Serverless::Function
