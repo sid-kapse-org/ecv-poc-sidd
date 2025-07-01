@@ -1,6 +1,8 @@
-import AWS from 'aws-sdk';
-const textract = new AWS.Textract();
-const s3 = new AWS.S3();
+import { TextractClient, AnalyzeDocumentCommand } from '@aws-sdk/client-textract';
+import { S3Client } from '@aws-sdk/client-s3';
+
+const textractClient = new TextractClient({});
+const s3Client = new S3Client({});
 
 export const handler = async (event) => {
     try {
@@ -23,7 +25,8 @@ export const handler = async (event) => {
         };
 
         // Analyze the document with Textract
-        const data = await textract.analyzeDocument(params).promise();
+        const command = new AnalyzeDocumentCommand(params);
+        const data = await textractClient.send(command);
         
         // Process the blocks to find our target fields
         const result = {
